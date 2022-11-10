@@ -1,9 +1,11 @@
 import javax.swing.*;
+
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
+//proposal 이전 버전
 public class DS_project_v1 extends JFrame{
 	RectPanel rectPanel;
 
@@ -64,18 +66,28 @@ public class DS_project_v1 extends JFrame{
         MenuActionListener listener = new MenuActionListener(); 
 
         mb.setBackground(Color.pink);
+        JMenu[] menus = new JMenu[5];
+        String[] menunames = {"File", "Shape", "Draw", "Zoom in", "Zoom out"};
+        
+        for(int i=0; i<menus.length; i++) {
+        	menus[i] = new JMenu(menunames[i]);
+        	mb.add(menus[i]);
+        	menus[i].addActionListener(new MenuActionListener());
+        }
+        /*
         JMenu filemenu = new JMenu("File");
         JMenu shapemenu = new JMenu("Shape");
         JMenu drawmenu = new JMenu("Draw");
         JMenu zoominmenu = new JMenu("Zoom in");
         JMenu zoomoutmenu = new JMenu("Zoom out");
-
+        
         mb.add(filemenu);
         mb.add(shapemenu);
         mb.add(drawmenu);
         mb.add(zoominmenu);
         mb.add(zoomoutmenu);
-
+		*/
+        
         JMenuItem savemenu = new JMenuItem("Save");
         JMenuItem openmenu = new JMenuItem("Open");
         JMenuItem clearmenu = new JMenuItem("Clear");
@@ -86,10 +98,14 @@ public class DS_project_v1 extends JFrame{
         savemenu.addActionListener(listener);
         openmenu.addActionListener(listener);
         clearmenu.addActionListener(listener);
-
-        filemenu.add(savemenu);
-        filemenu.add(openmenu);
-        filemenu.add(clearmenu);
+        
+        //File 세부 메뉴들
+        menus[0].add(savemenu);
+        menus[0].add(openmenu);
+        menus[0].add(clearmenu);
+//        filemenu.add(savemenu);
+//        filemenu.add(openmenu);
+//        filemenu.add(clearmenu);
 
         JMenu colormenu1 = new JMenu("Color");
         JMenu thicnesskmenu1 = new JMenu("Line thinkness");
@@ -172,20 +188,27 @@ public class DS_project_v1 extends JFrame{
         thicnesskmenu1.add(level61);
 
         //shapemenu랑 drawmenu똑같은데 왜이렇게만들어놓은건지?
-        shapemenu.add(colormenu1);
-        shapemenu.add(thicnesskmenu1);
+        menus[1].add(colormenu1);
+        menus[1].add(thicnesskmenu1);
+//        shapemenu.add(colormenu1);
+//        shapemenu.add(thicnesskmenu1);
 
-        drawmenu.add(colormenu);
-        drawmenu.add(thicnesskmenu);
+        menus[2].add(colormenu);
+        menus[2].add(thicnesskmenu);
+//        drawmenu.add(colormenu);
+//        drawmenu.add(thicnesskmenu);
 
 
-        shapemenu.addSeparator();
-        drawmenu.addSeparator();
+        menus[1].addSeparator();
+//        shapemenu.addSeparator();
+        menus[2].addSeparator();
         colormenu.addSeparator();
         thicnesskmenu.addSeparator();
         colormenu1.addSeparator();
         thicnesskmenu1.addSeparator();
-        filemenu.addSeparator();
+        
+        menus[0].addSeparator();
+//        filemenu.addSeparator();
         
         this.setJMenuBar(mb);
 //        this.setLayout(new FlowLayout());
