@@ -24,4 +24,28 @@ public class ShapeRepository {
 	Color myfillcolor = Color.white;
 	int thick = 0;
 	
+	ShapeRepository(){
+		
+	}
+	
+	ShapeRepository(ShapeRepository clone){
+		option = clone.option;
+		minx = clone.minx;
+		miny = clone.miny;
+		maxx = clone.maxx;
+		maxy = clone.maxy;
+		start = clone.start;
+		end = clone.end;
+		width = clone.width;
+		height = clone.height;
+		array_x = clone.array_x;
+		array_y = clone.array_y;
+		size = clone.size;
+		moved = clone.moved;
+		sketchSP = clone.sketchSP;
+		mypencolor = clone.myfillcolor;
+		myfillcolor = clone.myfillcolor;
+		thick = clone.thick;
+	}
+	
 }

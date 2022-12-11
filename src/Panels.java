@@ -95,7 +95,7 @@ public class Panels extends JPanel{
 	//각 도형들의 포인트를 저장해 놓는 벡터
 
 	Vector<Point> sketSP = new Vector<Point>();
-	ShapeRepository newshape;
+	ShapeRepository newshape, copycropshape;
 	Stack<ShapeRepository> shape = new Stack<ShapeRepository>();
 	Stack<ShapeRepository> redoshape = new Stack<ShapeRepository>();
 	Stack<ShapeRepository> moveshape = new Stack<ShapeRepository>();
@@ -114,7 +114,7 @@ public class Panels extends JPanel{
 	int eraserthick = 15;
 
 	Dimension dim = new Dimension(1000,700);
-	Dimension dim1 = new Dimension(1000, 50);
+	Dimension dim1 = new Dimension(1000, 60);
 	Dimension dim2 = new Dimension(1000,570);
 	Dimension dim3 = new Dimension(1000, 30);
 
@@ -169,49 +169,140 @@ public class Panels extends JPanel{
 		exit.addActionListener(new ExitAction());
 
 		//툴바 설정
-		toolbar.setBackground(Color.gray);
+		toolbar.setBackground(Color.white);
 		toolbar.setSize(dim1);
 		toolbar.setLayout(new FlowLayout());
+		
+		ImageIcon back = new ImageIcon("folder/back.png");
+	    ImageIcon back2 = new ImageIcon("folder/back2.png");
+	    ImageIcon copy = new ImageIcon("folder/copy.png");
+	    ImageIcon copy2 = new ImageIcon("folder/copy2.png");
+	    ImageIcon front = new ImageIcon("folder/front.png");
+	    ImageIcon front2 = new ImageIcon("folder/front2.png");
+	    ImageIcon paste = new ImageIcon("folder/paste.png");
+	    ImageIcon paste2 = new ImageIcon("folder/paste2.png");
+	    ImageIcon leftrotation = new ImageIcon("folder/leftrotation.png");
+	    ImageIcon leftrotation2 = new ImageIcon("folder/leftrotation2.png");
+	    ImageIcon rightrotation = new ImageIcon("folder/rightrotation.png");
+	    ImageIcon rightrotation2 = new ImageIcon("folder/rightrotation2.png");
+	    ImageIcon color = new ImageIcon("folder/color.png");
+	    ImageIcon color2 = new ImageIcon("folder/color2.png");
+	    ImageIcon line = new ImageIcon("folder/line.png");
+	    ImageIcon line2 = new ImageIcon("folder/line2.png");
+	    ImageIcon erase = new ImageIcon("folder/erase.png");
+	    ImageIcon erase2 = new ImageIcon("folder/erase2.png");
+		
+	    Image[] org_image = new Image[9];
+	    Image[] ch_image = new Image[9];
+	    ImageIcon[] org_icon = new ImageIcon[9];
+	    ImageIcon[] ch_icon = new ImageIcon[9];
+	    JButton[] btn = new JButton[9];
+	    
+	    org_image[0] = back.getImage();
+	    org_image[1] = front.getImage();
+	    org_image[2] = copy.getImage();
+	    org_image[3] = paste.getImage();
+	    org_image[4] = leftrotation.getImage();
+	    org_image[5] = rightrotation.getImage();
+	    org_image[6] = color.getImage();
+	    org_image[7] = line.getImage();
+	    org_image[8] = erase.getImage();
 
-		JLabel preview = new JLabel("미리보기");
-		preview.setPreferredSize(new Dimension(60,40));
+	    ch_image[0] = back2.getImage();
+	    ch_image[1] = front2.getImage();
+	    ch_image[2] = copy2.getImage();
+	    ch_image[3] = paste2.getImage();
+	    ch_image[4] = leftrotation2.getImage();
+	    ch_image[5] = rightrotation2.getImage();
+	    ch_image[6] = color2.getImage();
+	    ch_image[7] = line2.getImage();
+	    ch_image[8] = erase2.getImage();
 
-		toolbar.add(preview);
-		toolbar.add(examplepanel);
-		toolbar.addSeparator();
-		JButton[] optionbtn = new JButton[5]; 
-		optionbtn[0] = new JButton("l");
-		optionbtn[1] = new JButton("▢");
-		optionbtn[2] = new JButton("△");
-		optionbtn[3] = new JButton(">");
-		optionbtn[4] = new JButton("⌇");
-		for(int i = 0; i<optionbtn.length; i++) {
-			toolbar.add(optionbtn[i]);
-			optionbtn[i].setPreferredSize(new Dimension(40,40));
-			optionbtn[i].addActionListener(new ButtonAction());
-		}
-		toolbar.addSeparator();
+	    for (int i = 0; i < org_image.length; i++) {
+	        org_image[i] = org_image[i].getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+	    }
 
-		JButton[] setbtn = new JButton[6]; 
-		setbtn[0] = new JButton("Undo");
-		setbtn[1] = new JButton("Redo");
-		setbtn[2] = new JButton("지우개");
-		setbtn[3] = new JButton("지우기");
-		setbtn[4] = new JButton("펜색");
-		setbtn[5] = new JButton("채우기색");
+	    for (int i = 0; i < ch_image.length; i++) {
+	        ch_image[i] = ch_image[i].getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+	    }
 
-		for(int i = 0; i<setbtn.length; i++) {
-			toolbar.add(setbtn[i]);
-			setbtn[i].setPreferredSize(new Dimension(60,40));
-			setbtn[i].addActionListener(new ButtonAction());
-		}
+	    for (int i = 0; i < org_icon.length; i++) {
+	        org_icon[i] = new ImageIcon(org_image[i]);
+	    }
 
-		JLabel thickLabel = new JLabel("두께");
-		thickLabel.setPreferredSize(new Dimension(40,40));
-		toolbar.add(thickLabel);
-		toolbar.add(spinner);
+	    for (int i = 0; i < ch_icon.length; i++) {
+	        ch_icon[i] = new ImageIcon(ch_image[i]);
+	    }
+	    
+	    for (int i = 0; i < btn.length; i++) {
+	        btn[i] = new JButton(org_icon[i]);
+	        toolbar.add(btn[i]);
+	        btn[i].setPreferredSize(new Dimension(40, 40));
+	        btn[i].setRolloverIcon(ch_icon[i]);
+	        btn[i].setBorderPainted(true);
+	        toolbar.addSeparator();
+	        btn[i].setName("img"+Integer.toString(i));
+	        btn[i].addActionListener(new ButtonAction());
+	    }
+		
+	    SpinnerNumberModel fontsize = new SpinnerNumberModel(8, 1, 50, 1);
+	    JSpinner spinner = new JSpinner(fontsize);
+	    JLabel sizelabel = new JLabel("Text Size");
+	    sizelabel.setPreferredSize(new Dimension(60, 40));
+	    toolbar.add(sizelabel);
+	    toolbar.add(spinner);
+	    
+	    JLabel fontlabel = new JLabel("Fonts");
+	    fontlabel.setPreferredSize(new Dimension(40,40));
+	    
+	    JComboBox combo = new JComboBox<>();
+	    combo.addItem("맑은 고딕");
+	    combo.addItem("궁서체");
+	    combo.addItem("함초롱바탕");
+	    toolbar.add(fontlabel);
+	    toolbar.add(combo);
+	    
+	    
 
-		//스피너에 리스너 설
+//		JLabel preview = new JLabel("미리보기");
+//		preview.setPreferredSize(new Dimension(60,40));
+//
+//		toolbar.add(preview);
+//		toolbar.add(examplepanel);
+//		toolbar.addSeparator();
+//		JButton[] optionbtn = new JButton[5]; 
+//		optionbtn[0] = new JButton("l");
+//		optionbtn[1] = new JButton("▢");
+//		optionbtn[2] = new JButton("△");
+//		optionbtn[3] = new JButton(">");
+//		optionbtn[4] = new JButton("⌇");
+//		for(int i = 0; i<optionbtn.length; i++) {
+//			toolbar.add(optionbtn[i]);
+//			optionbtn[i].setPreferredSize(new Dimension(40,40));
+//			optionbtn[i].addActionListener(new ButtonAction());
+//		}
+//		toolbar.addSeparator();
+
+//		JButton[] setbtn = new JButton[6]; 
+//		setbtn[0] = new JButton("Undo");
+//		setbtn[1] = new JButton("Redo");
+//		setbtn[2] = new JButton("지우개");
+//		setbtn[3] = new JButton("지우기");
+//		setbtn[4] = new JButton("펜색");
+//		setbtn[5] = new JButton("채우기색");
+//
+//		for(int i = 0; i<setbtn.length; i++) {
+//			toolbar.add(setbtn[i]);
+//			setbtn[i].setPreferredSize(new Dimension(60,40));
+//			setbtn[i].addActionListener(new ButtonAction());
+//		}
+//
+//		JLabel thickLabel = new JLabel("두께");
+//		thickLabel.setPreferredSize(new Dimension(40,40));
+//		toolbar.add(thickLabel);
+//		toolbar.add(spinner);
+
+		//두께 스피너에 리스너 설치 - 필요업슴
 		spinner.addChangeListener(new ChangeDetector());
 	}
 
@@ -616,46 +707,92 @@ public class Panels extends JPanel{
 			JButton myButton = (JButton)e.getSource();
 			mousepressed = 0;
 			newshape = new ShapeRepository();
-			String temp = myButton.getText();
+//			String temp = myButton.getText();
+			String temp;
+			if (myButton.getText().compareTo("")!=0)
+				temp = myButton.getText();
+			else
+				temp = myButton.getName();
+			System.out.println("clicked button name: "+temp);
 
+			
+			if(temp.equals("img0")) {
+				option = UNDO;
+				
+				if(shape.isEmpty()==false) {
+					if(shape.get(shape.size()-1).moved == 1) {
+						redoshape.push(shape.pop());
+						shape.push(moveshape.pop());
+					}
+					else	redoshape.push(shape.pop());
+				}
+				canvas.repaint();
+			}
+			else if(temp.equals("img1")) {
+				option = REDO;
+				if(redoshape.isEmpty() == false) {
+					if(redoshape.get(redoshape.size()-1).moved == 1) {
+						moveshape.push(shape.pop());
+						shape.push(redoshape.pop());
+					}
+					else shape.push(redoshape.pop()); 
+				}
 
-			if(temp.equals("l")) {
-				if(option == LINE) option = DEFAULT;
-				else option = LINE;
-				new Canvas();
+				canvas.repaint();
 			}
-			else if(temp.equals("▢")) {
-				if(option == RECT)option = DEFAULT;
-				else option = RECT;
-				new Canvas();
+			else if(temp.equals("img2")) {
+				System.out.println("copy action");
+				if(shape.isEmpty()==false) {
+//					copycropshape = shape.peek();
+					copycropshape = new ShapeRepository(shape.peek());
+					copycropshape.mypencolor = Color.pink;
+					System.out.println(copycropshape);
+				}
+				canvas.repaint();
+				
 			}
-			else if(temp.equals("△")) {
-				if(option == TRIANGLE)option = DEFAULT;
-				else option = TRIANGLE;
-				new Canvas();
+			else if(temp.equals("img3")) {
+				System.out.println("paste action");
+				if(copycropshape!=null) {
+					shape.push(copycropshape);
+				}
+				canvas.repaint();
 			}
-			else if(temp.equals(">")) {
-				if(option == POLYLINE)option = DEFAULT;
-				else option = POLYLINE;
-				new Canvas();
-
-			}
-			else if(temp.equals("⌇")) {
-				if(option == SKETCH)option = DEFAULT;
-				option = SKETCH;
-				new Canvas();
-			}
-			else if(temp.equals("펜색")) {
+			else if(temp.equals("img6")) {
 				mypencolor = JColorChooser.showDialog(null, "색선정", Color.blue);
 				examplepanel.repaint();
+				//펜색바꾸기 여기서 가능
+//				moveshape.peek().mypencolor = mypencolor;
 			}
+			else if(temp.equals("img7")) {
+				JFrame thickness = new JFrame("Thickness");
+				thickness.setVisible(true);
+				thickness.setSize(100,250);
+				thickness.setLocation(200,200);
 
-			else if(temp.equals("채우기색")) {
-				myfillcolor = JColorChooser.showDialog(null, "색선정", Color.blue);
-				examplepanel.repaint();
+
+				JSlider penThickSize = new JSlider(JSlider.VERTICAL, 0, 50, 15);
+				penThickSize.setMajorTickSpacing(10);
+				penThickSize.setMinorTickSpacing(1);
+				penThickSize.setPaintTicks(true);
+				penThickSize.setPaintLabels(true);
+
+				thickness.add(penThickSize);
+
+				penThickSize.addChangeListener(new ChangeListener() {
+
+					@Override
+					public void stateChanged(ChangeEvent e) {
+						// TODO Auto-generated method stub
+						JSlider source = (JSlider)e.getSource();
+						if(!source.getValueIsAdjusting()) {
+							thick = (int)source.getValue();
+						}
+					}
+				});
+				
 			}
-
-			else if(temp.equals("지우개")) {
+			else if(temp.equals("img8")) {
 				if(option == ERASER) option = DEFAULT;
 				else {
 					option = ERASER;
@@ -687,38 +824,9 @@ public class Panels extends JPanel{
 				}
 				new Canvas();
 			}
-
-			else if(temp.equals("지우기")) {
-				option = ERASE;
-				canvas.repaint();
-
-			}
-
-			else if(temp.equals("Undo")) {
-				option = UNDO;
-				
-				if(shape.isEmpty()==false) {
-					if(shape.get(shape.size()-1).moved == 1) {
-						redoshape.push(shape.pop());
-						shape.push(moveshape.pop());
-					}
-					else	redoshape.push(shape.pop());
-				}
-				canvas.repaint();
-			}
+			
 			else if(temp.equals("Redo")) {
-				option = REDO;
-				if(redoshape.isEmpty() == false) {
-					if(redoshape.get(redoshape.size()-1).moved == 1) {
-						moveshape.push(shape.pop());
-						shape.push(redoshape.pop());
-					}
-					else shape.push(redoshape.pop()); 
-				}
-
-				canvas.repaint();
-			}
-			else if(temp.equals("Redo")) {
+				//위에도 redo인데 왜똑같이 redo임? 어차피 실행안될듯
 				option = REDO;
 				if(redoshape.isEmpty() == false) shape.push(redoshape.pop()); 
 

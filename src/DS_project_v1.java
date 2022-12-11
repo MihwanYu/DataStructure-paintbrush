@@ -40,15 +40,15 @@ public class DS_project_v1 extends JFrame{
     				break;
     			case "Save" :
     				if(rectPanel!=null) {
-    					SaveL savePann = new SaveL(rectPanel, rectPanel.bufferedImage);
-    					savePann.savePic();
+//    					SaveL savePann = new SaveL(rectPanel, rectPanel.bufferedImage);
+//    					savePann.savePic();
     				}
     				
     				System.out.println("menu save clicked"); break;
     			case "Open" :
     				if(rectPanel!=null) {
-    					OpenL openPann = new OpenL(rectPanel, rectPanel.bufferedImage);
-    					openPann.openPic();
+//    					OpenL openPann = new OpenL(rectPanel, rectPanel.bufferedImage);
+//    					openPann.openPic();
     				}
     				System.out.println("menu open clicked"); break;
     			case "Clear" :
