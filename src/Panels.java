@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.awt.event.ActionEvent;
@@ -46,14 +47,12 @@ public class Panels extends JPanel{
 	public static final int LINE = 1;
 	public static final int RECT = 2;
 	public static final int TRIANGLE = 3;
-	public static final int POLYLINE = 4;
+	public static final int IMAGE = 4;
 	public static final int SKETCH = 5;
 	public static final int ERASE = 6;
 	public static final int ERASER = 7;
 	public static final int UNDO = 8;
 	public static final int REDO = 9;
-
-
 
 
 	//포인트 받아오는 곳
@@ -68,12 +67,11 @@ public class Panels extends JPanel{
 	int height;
 	int move = 0;
 	Point mouse = new Point(0,0);
+	Image img;
 
 	//프레임 안에 있는 요소들
 	JPanel optionPanel = new JPanel();
 	Canvas canvas = new Canvas();
-	//왜 못불러오는지;;;;;;;;;;
-//	PainterTools tb = new PainterTools("Custom Toolbar"); //커스텀 툴바
 	JMenuBar menubar = new JMenuBar();
 	JToolBar toolbar = new JToolBar("Options");
 	SpinnerNumberModel sizemodel = new SpinnerNumberModel(8, 1, 50, 1);
@@ -121,25 +119,16 @@ public class Panels extends JPanel{
 	//프레임 설정해주는 곳
 	public Panels() {
 
-
-		//프레임 설정
 		setLocation(800,100);
-//		setTitle("Jin's Studio");
 		setSize(dim);
 		setLayout(null);
 		setVisible(true);
 
-//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		JToolBar tb = new JToolBar();
-//		add(tb);
-		
 		//아이템들 위치 선정
 		add(canvas);
 		add(toolbar);
 		
 		add(endbarpanel);
-//		setJMenuBar(menubar);
-//		toolbar.setLocation(0,0);
 		endbarpanel.setSize(dim3);
 		endbarpanel.setBackground(Color.gray);
 		endbarpanel.setLocation(0,620);
@@ -154,13 +143,6 @@ public class Panels extends JPanel{
 		endbarpanel.add(xycoord);
 		endbarpanel.add(mode);
 		
-		//custom toolbar
-//		tb.setLocation(0,0);
-//		tb.setPreferredSize(new Dimension(1000,60));
-//	    tb.setBackground(Color.gray);
-//	    tb.setLayout(new FlowLayout());
-	    
-
 		//메뉴를 위한 정보 입력
 		JMenu file = new JMenu("File");
 		menubar.add(file);
@@ -173,50 +155,26 @@ public class Panels extends JPanel{
 		toolbar.setSize(dim1);
 		toolbar.setLayout(new FlowLayout());
 		
-		ImageIcon back = new ImageIcon("folder/back.png");
-	    ImageIcon back2 = new ImageIcon("folder/back2.png");
-	    ImageIcon copy = new ImageIcon("folder/copy.png");
-	    ImageIcon copy2 = new ImageIcon("folder/copy2.png");
-	    ImageIcon front = new ImageIcon("folder/front.png");
-	    ImageIcon front2 = new ImageIcon("folder/front2.png");
-	    ImageIcon paste = new ImageIcon("folder/paste.png");
-	    ImageIcon paste2 = new ImageIcon("folder/paste2.png");
-	    ImageIcon leftrotation = new ImageIcon("folder/leftrotation.png");
-	    ImageIcon leftrotation2 = new ImageIcon("folder/leftrotation2.png");
-	    ImageIcon rightrotation = new ImageIcon("folder/rightrotation.png");
-	    ImageIcon rightrotation2 = new ImageIcon("folder/rightrotation2.png");
-	    ImageIcon color = new ImageIcon("folder/color.png");
-	    ImageIcon color2 = new ImageIcon("folder/color2.png");
-	    ImageIcon line = new ImageIcon("folder/line.png");
-	    ImageIcon line2 = new ImageIcon("folder/line2.png");
-	    ImageIcon erase = new ImageIcon("folder/erase.png");
-	    ImageIcon erase2 = new ImageIcon("folder/erase2.png");
+		String[] iconames = {"back", "front", "copy", "paste", "leftrotation", "rightrotation", "color", "line", "erase", "scissor", "drag"};
 		
-	    Image[] org_image = new Image[9];
-	    Image[] ch_image = new Image[9];
-	    ImageIcon[] org_icon = new ImageIcon[9];
-	    ImageIcon[] ch_icon = new ImageIcon[9];
-	    JButton[] btn = new JButton[9];
+		
+	    Image[] org_image = new Image[11];
+	    Image[] ch_image = new Image[11];
+	    ImageIcon[] org_icon = new ImageIcon[11];
+	    ImageIcon[] ch_icon = new ImageIcon[11];
+	    JButton[] btn = new JButton[11];
 	    
-	    org_image[0] = back.getImage();
-	    org_image[1] = front.getImage();
-	    org_image[2] = copy.getImage();
-	    org_image[3] = paste.getImage();
-	    org_image[4] = leftrotation.getImage();
-	    org_image[5] = rightrotation.getImage();
-	    org_image[6] = color.getImage();
-	    org_image[7] = line.getImage();
-	    org_image[8] = erase.getImage();
-
-	    ch_image[0] = back2.getImage();
-	    ch_image[1] = front2.getImage();
-	    ch_image[2] = copy2.getImage();
-	    ch_image[3] = paste2.getImage();
-	    ch_image[4] = leftrotation2.getImage();
-	    ch_image[5] = rightrotation2.getImage();
-	    ch_image[6] = color2.getImage();
-	    ch_image[7] = line2.getImage();
-	    ch_image[8] = erase2.getImage();
+	    int orgIdx = 0;
+		for(String name:iconames) {
+			org_image[orgIdx] = new ImageIcon("folder/"+name+".png").getImage();
+			orgIdx ++;
+		}
+		
+		orgIdx = 0;
+		for(String name:iconames) {
+			ch_image[orgIdx] = new ImageIcon("folder/"+name+"2.png").getImage();
+			orgIdx ++;
+		}
 
 	    for (int i = 0; i < org_image.length; i++) {
 	        org_image[i] = org_image[i].getScaledInstance(40, 40, Image.SCALE_SMOOTH);
@@ -261,46 +219,6 @@ public class Panels extends JPanel{
 	    combo.addItem("함초롱바탕");
 	    toolbar.add(fontlabel);
 	    toolbar.add(combo);
-	    
-	    
-
-//		JLabel preview = new JLabel("미리보기");
-//		preview.setPreferredSize(new Dimension(60,40));
-//
-//		toolbar.add(preview);
-//		toolbar.add(examplepanel);
-//		toolbar.addSeparator();
-//		JButton[] optionbtn = new JButton[5]; 
-//		optionbtn[0] = new JButton("l");
-//		optionbtn[1] = new JButton("▢");
-//		optionbtn[2] = new JButton("△");
-//		optionbtn[3] = new JButton(">");
-//		optionbtn[4] = new JButton("⌇");
-//		for(int i = 0; i<optionbtn.length; i++) {
-//			toolbar.add(optionbtn[i]);
-//			optionbtn[i].setPreferredSize(new Dimension(40,40));
-//			optionbtn[i].addActionListener(new ButtonAction());
-//		}
-//		toolbar.addSeparator();
-
-//		JButton[] setbtn = new JButton[6]; 
-//		setbtn[0] = new JButton("Undo");
-//		setbtn[1] = new JButton("Redo");
-//		setbtn[2] = new JButton("지우개");
-//		setbtn[3] = new JButton("지우기");
-//		setbtn[4] = new JButton("펜색");
-//		setbtn[5] = new JButton("채우기색");
-//
-//		for(int i = 0; i<setbtn.length; i++) {
-//			toolbar.add(setbtn[i]);
-//			setbtn[i].setPreferredSize(new Dimension(60,40));
-//			setbtn[i].addActionListener(new ButtonAction());
-//		}
-//
-//		JLabel thickLabel = new JLabel("두께");
-//		thickLabel.setPreferredSize(new Dimension(40,40));
-//		toolbar.add(thickLabel);
-//		toolbar.add(spinner);
 
 		//두께 스피너에 리스너 설치 - 필요업슴
 		spinner.addChangeListener(new ChangeDetector());
@@ -342,12 +260,24 @@ public class Panels extends JPanel{
 
 			Graphics2D g2 =(Graphics2D)g;
 			if(option == ERASE) {
-
-				newshape.myfillcolor = Color.white;
-				newshape.start = new Point(0, 0);
-				newshape.end = new Point(1000, 500);
-				newshape.option = option;
-				shape.add(newshape);
+				if(newshape == null) {
+					System.out.println("newshape not exists");
+					ShapeRepository tempShape = new ShapeRepository();
+					tempShape.myfillcolor = Color.white;
+					tempShape.start = new Point(0, 0);
+					tempShape.end = new Point(1000, 570);
+					tempShape.option = option;
+					shape.add(tempShape);
+				}
+				else {
+					System.out.println("newshape exists: "+newshape);
+					newshape.myfillcolor = Color.white;
+					newshape.start = new Point(0, 0);
+					newshape.end = new Point(1000, 570);
+					newshape.option = option;
+					shape.add(newshape);
+				}
+				
 			}
 			for(int i= 0 ; i<shape.size(); i++) {
 				g2.setPaint(shape.get(i).myfillcolor);
@@ -358,6 +288,7 @@ public class Panels extends JPanel{
 					g2.drawLine(shape.get(i).start.x, shape.get(i).start.y, shape.get(i).end.x, shape.get(i).end.y);
 					break;
 				case RECT :
+					System.out.println("minx changed: "+shape.get(i).minx);
 //					g2.fillRect(shape.get(i).minx, shape.get(i).miny, shape.get(i).width, shape.get(i).height);
 					g2.setPaint(shape.get(i).mypencolor);
 					g2.drawRect(shape.get(i).minx, shape.get(i).miny, shape.get(i).width, shape.get(i).height);
@@ -369,10 +300,19 @@ public class Panels extends JPanel{
 //					g2.drawOval(shape.get(i).minx, shape.get(i).miny, shape.get(i).width, shape.get(i).height);
 					g2.drawPolygon(new int[] {shape.get(i).minx, shape.get(i).minx+shape.get(i).width/2, shape.get(i).maxx}, new int[] {shape.get(i).maxy, shape.get(i).miny, shape.get(i).maxy}, 3);
 					break;
-				case POLYLINE :
-					g2.setPaint(shape.get(i).mypencolor);
-					g2.drawPolyline(shape.get(i).array_x, shape.get(i).array_y, shape.get(i).size);
+				case IMAGE :
+//					Dimension nDim = new Dimension(shape.get(i).img.getWidth(), shape.get(i).img.getHeight());
+					System.out.println("minx changed: "+shape.get(i).minx);
+					if(shape.get(i).img == null) {
+						System.out.println("img null");
+					}
+					g2.drawImage(shape.get(i).img, shape.get(i).minx, shape.get(i).miny, null);
 					break;
+//					g2.dispose();
+//				case POLYLINE :
+//					g2.setPaint(shape.get(i).mypencolor);
+//					g2.drawPolyline(shape.get(i).array_x, shape.get(i).array_y, shape.get(i).size);
+//					break;
 				case SKETCH : case ERASER :
 					g2.setPaint(shape.get(i).mypencolor);
 					for(int j = 1; j< shape.get(i).sketchSP.size(); j++) {
@@ -386,7 +326,10 @@ public class Panels extends JPanel{
 				}
 			}
 
-			//그림자 그리기
+			//그림자 그리기 -> 아예 모두 취호(12.11)
+			/*
+			 * 
+			 
 			if(start != null) {
 
 				if(option == ERASER) {
@@ -412,13 +355,13 @@ public class Panels extends JPanel{
 //					g2.fillOval(minx, miny, width, height);
 					g2.setPaint(mypencolor);
 //					g2.drawOval(minx, miny, width, height);
-//					g2.drawPolygon(new int[] {minx, minx+width/2, maxx}, new int[] {maxy, miny, maxy}, 3);
+//					g2.drawPolygon(new int[] {start.x, (start.x+end.x)/2, end.x}, new int[] {start.y, (start.x+end.y)/2, end.y}, 3);
 				}
-				else if(option == POLYLINE) {
-					g2.setPaint(mypencolor);
-					if(move == 0)g2.drawPolyline(tempX, tempY, psize+1);
-					else g2.drawPolyline(tempX, tempY, psize);
-				}
+//				else if(option == POLYLINE) {
+//					g2.setPaint(mypencolor);
+//					if(move == 0)g2.drawPolyline(tempX, tempY, psize+1);
+//					else g2.drawPolyline(tempX, tempY, psize);
+//				}
 				else if(option == SKETCH) {
 					g2.setPaint(mypencolor);
 					for(int i = 1; i < sketSP.size(); i++) {
@@ -441,7 +384,8 @@ public class Panels extends JPanel{
 
 
 			}
-
+			
+			*/
 		}
 
 		//마우스 리스너 클래스
@@ -468,7 +412,9 @@ public class Panels extends JPanel{
 						int maxy = tempshape.maxy;
 						int minx = tempshape.minx;
 						int miny = tempshape.miny;
+						System.out.println("shape x,y values: "+maxx+", "+minx+", now option "+tempshape.option);
 						if(sx <= maxx && sx >= minx && sy <= maxy && sy>= miny) {
+							System.out.println("move is 1 in option: "+option);
 							moveshape.push(shape.remove(top));
 							myfillcolor = tempshape.myfillcolor;
 							mypencolor = tempshape.mypencolor;
@@ -482,15 +428,13 @@ public class Panels extends JPanel{
 						}
 					}
 				}
-				if(makeinstance == 0 && (option == LINE || option == RECT || option == SKETCH || option == POLYLINE || option == TRIANGLE || option == ERASER)) {
+				if(makeinstance == 0 && (option == LINE || option == RECT || option == SKETCH || option == TRIANGLE || option == ERASER)) {
 					redoshape.removeAllElements();
 					newshape = new ShapeRepository();
 					if(option == ERASER) {
 						newshape.mypencolor = Color.white;
 						newshape.thick = eraserthick;
 					}
-
-
 					else {
 						newshape.mypencolor = mypencolor;
 						newshape.myfillcolor = myfillcolor;
@@ -498,43 +442,14 @@ public class Panels extends JPanel{
 					}
 					newshape.option = option;
 					makeinstance = 1;
-					System.out.println("object packed");
+					System.out.println("object packed: option"+option);
 				}
 
 				if(mousepressed == 0 && option != 0) {
-
 					mousepressed += 1;
 				}
 				else mousepressed = 0;
 
-				if(option == POLYLINE) {
-					if(mousepressed == 1) {
-						tempX[psize] = e.getX();
-						tempY[psize] = e.getY();
-					}
-					psize++;
-					tempX[psize] = e.getX();
-					tempY[psize] = e.getY();
-
-					if(e.getButton()==MouseEvent.BUTTON3) {
-						newshape.size = psize;
-						for(int i = 0 ; i < psize ; i++) {
-							
-							newshape.maxx = Math.max(newshape.maxx, tempX[i]);
-							newshape.minx = Math.min(newshape.minx, tempX[i]);
-							newshape.maxy = Math.max(newshape.maxy, tempY[i]);
-							newshape.miny = Math.min(newshape.miny, tempY[i]);
-							newshape.array_x[i] = tempX[i];
-							newshape.array_y[i] = tempY[i];
-						}
-						
-						shape.add(newshape);
-						makeinstance = 0;
-						psize = 0;
-						option = DEFAULT;
-						repaint();
-					}
-				}
 				if(e.getButton()==MouseEvent.BUTTON3) {
 					option = DEFAULT;
 				}
@@ -548,7 +463,7 @@ public class Panels extends JPanel{
 				else if(option == 1) t = "LINE";
 				else if(option == 2) t = "RECTANGLE";
 				else if(option == 3) t = "TRIANGLE";
-				else if(option == 4) t = "POLYLINE";
+				else if(option == 4) t = "IMGAE";
 				else if(option == 5) t = "SKETCH";
 				else if(option == 6) t = "ERASE";
 				else if(option == 7) t = "ERASER";
@@ -563,6 +478,7 @@ public class Panels extends JPanel{
 			public void mouseReleased(MouseEvent e) {
 				if(option != DEFAULT && move == 0)shape.add(newshape);
 				if(move == 1) {
+					System.out.println("mouse released: changed minx is "+minx);
 					newshape.option =option; 
 					newshape.minx = minx;
 					newshape.miny = miny;
@@ -633,7 +549,7 @@ public class Panels extends JPanel{
 			@Override
 			//마우스 드레그 됐을 때
 			public void mouseDragged(MouseEvent e) {
-				
+//				System.out.println("mouse dragged: option is "+option+", move is "+move);
 				px = e.getX() - sx;
 				py = e.getY() - sy;
 				// TODO Auto-generated method stub
@@ -644,7 +560,6 @@ public class Panels extends JPanel{
 					newshape.minx = (int)Math.min(e.getPoint().getX(), newshape.minx);
 					newshape.maxy = (int)Math.max(e.getPoint().getY(), newshape.maxy);
 					newshape.miny = (int)Math.max(e.getPoint().getY(), newshape.maxy);
-
 				}
 				end = e.getPoint();
 				if(option == RECT || option == TRIANGLE) {
@@ -653,8 +568,13 @@ public class Panels extends JPanel{
 					width = (int)Math.abs(start.getX()- end.getX());
 					height = (int)Math.abs(start.getY() - end.getY());
 				}
-
+				if(option == IMAGE) {
+					newshape.minx = (int)Math.min(start.getX(), end.getX());
+					newshape.miny = (int)Math.min(start.getY(), end.getY());
+				}
 				if(move == 1) {
+					//이미 생성된 도형 움직일때 쓰는거
+					System.out.println("px: "+px);
 					option = tempshape.option;
 					minx = tempshape.minx + px;
 					miny = tempshape.miny + py;
@@ -687,14 +607,6 @@ public class Panels extends JPanel{
 				mouse = e.getPoint();
 
 				xycoord.setText("[x, y] = [" + mouse.getX() + "] [" +mouse.getY() + "]");
-				if(option == POLYLINE) {
-					if(psize > 0) {
-						tempX[psize] = e.getX();
-						tempY[psize] = e.getY();
-
-						repaint();
-					}
-				}
 
 
 			}
@@ -707,7 +619,6 @@ public class Panels extends JPanel{
 			JButton myButton = (JButton)e.getSource();
 			mousepressed = 0;
 			newshape = new ShapeRepository();
-//			String temp = myButton.getText();
 			String temp;
 			if (myButton.getText().compareTo("")!=0)
 				temp = myButton.getText();
@@ -757,6 +668,37 @@ public class Panels extends JPanel{
 					shape.push(copycropshape);
 				}
 				canvas.repaint();
+			}
+			else if(temp.equals("img4")) {
+				System.out.println("left rotation");
+				copycropshape = shape.pop();
+				System.out.println("shape size: "+shape.size());
+				if(copycropshape.option==RECT) {
+					System.out.println("rect left rotate");
+					copycropshape.minx = minx+copycropshape.height;
+					int realheight = copycropshape.height;
+					copycropshape.height = copycropshape.width;
+					copycropshape.width = realheight;
+					shape.push(copycropshape);
+				}
+				canvas.repaint();
+				System.out.println("shape size: "+shape.size());
+				
+			}
+			else if(temp.equals("img5")) {
+				System.out.println("right rotation");
+				copycropshape = shape.pop();
+				System.out.println("shape size: "+shape.size());
+				if(copycropshape.option==RECT) {
+					System.out.println("rect right rotate");
+					copycropshape.minx = minx-copycropshape.height;
+					int realheight = copycropshape.height;
+					copycropshape.height = copycropshape.width;
+					copycropshape.width = realheight;
+					shape.push(copycropshape);
+				}
+				canvas.repaint();
+				System.out.println("shape size: "+shape.size());
 			}
 			else if(temp.equals("img6")) {
 				mypencolor = JColorChooser.showDialog(null, "색선정", Color.blue);
@@ -832,6 +774,21 @@ public class Panels extends JPanel{
 
 				canvas.repaint();
 			}
+			else if(temp.equals("img9")) {
+				//잘라내기 버튼
+				System.out.println("crop action");
+				if(shape.isEmpty()==false) {
+//					copycropshape = shape.peek();
+					copycropshape = shape.pop();
+					copycropshape.mypencolor = Color.pink;
+					System.out.println(copycropshape);
+				}
+				canvas.repaint();
+			}
+			else if(temp.equals("img10")) {
+				System.out.println("drag mode");
+				option = 0;
+			}
 			String t = "";
 			if(option == 0) t = "DEFAULT";
 			else if(option == 1) t = "LINE";
@@ -847,8 +804,57 @@ public class Panels extends JPanel{
 			mode.setText("[Mode] = [" + t + "]");
 		}
 	}
+	
+	public void resetCanvas() {
+		option = ERASE;
+		canvas.repaint();
+	}
+	
+	public void drawImage() {
+		System.out.println("get image from computer");
+		//openCanvas 메서드랑똑같음거의 -> 근데 복붙과 드래그를 곁들인
+		JFileChooser jFileChooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("JPEG", "jpeg", "jpg", "png", "bmp", "gif");
+		jFileChooser.addChoosableFileFilter(filter);
+
+		int rVal = jFileChooser.showOpenDialog(null);
+		if (rVal == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = jFileChooser.getSelectedFile();
+			try {
+				System.out.println("open picture");
+				ShapeRepository newImage = new ShapeRepository();
+//				newImage = new ShapeRepository();
+//				img = ImageIO.read(new File(selectedFile.getAbsolutePath()));
+				Toolkit t=Toolkit.getDefaultToolkit();  
+		        Image img=ImageIO.read(new File(selectedFile.getAbsolutePath()));  
+//		        g.drawImage(i, 120,100,this); 
+		        
+				newImage.img = img;
+				newImage.option = 4;
+				newImage.minx = 0;
+				newImage.miny = 0;
+				BufferedImage bi = (BufferedImage)img;
+				newImage.maxx = bi.getWidth();
+				newImage.maxy = bi.getHeight();
+				shape.push(newImage);
+//				Dimension nDim = new Dimension(img.getWidth(), img.getHeight());
+				
+//				Graphics2D g2 = img.createGraphics();
+				canvas.getGraphics().drawImage(img, 0, 0, null);
+//				g2.dispose();
+				
+
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		if (rVal == JFileChooser.CANCEL_OPTION) {
+			System.out.println("open file cancled");
+		}	
+	}
+	
 	public void saveCanvas() {
-//		Container pane = frame.getContentPane();
 		BufferedImage img = new BufferedImage(canvas.getWidth(), canvas.getHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = img.createGraphics();
 		canvas.printAll(g2d);
@@ -882,31 +888,25 @@ public class Panels extends JPanel{
 			File selectedFile = jFileChooser.getSelectedFile();
 			try {
 				System.out.println("open picture");
-				BufferedImage bi = ImageIO.read(new File(selectedFile.getAbsolutePath()));
-				Dimension nDim = new Dimension(bi.getWidth(), bi.getHeight());
-				Graphics2D g2 = bi.createGraphics();
-//				panel.canvas.printAll(g2);  
-				
-//				canvas.paintAll(g2);
-//				canvas.setSize(nDim);
-				canvas.getGraphics().drawImage(bi, 0,0, null);
-				g2.dispose();
-				
-//				BufferedImage img = new BufferedImage(canvas.getWidth(), canvas.getHeight(), BufferedImage.TYPE_INT_RGB);
-//				Graphics2D g2d = img.createGraphics();
-//				canvas.printAll(g2d);
-//				g2d.dispose();
 				
 				
+		        Image img=ImageIO.read(new File(selectedFile.getAbsolutePath()));  
+		        ShapeRepository newImage = new ShapeRepository(img);
+//				newImage.img = img;
+				newImage.option = 4;
+				newImage.minx = 0;
+				newImage.miny = 0;
+				shape.push(newImage);
+				canvas.getGraphics().drawImage(img, 0, 0, null);
+
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
 		if (rVal == JFileChooser.CANCEL_OPTION) {
-
-		}		
-		
+			System.out.println("open file cancled");
+		}	
 	}
 
 	class ExamplePanel extends JPanel{

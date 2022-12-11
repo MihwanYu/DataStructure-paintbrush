@@ -1,5 +1,7 @@
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class ShapeRepository {
@@ -17,6 +19,9 @@ public class ShapeRepository {
 	int [] array_y = new int [40];
 	int size = 0;
 	int moved = 0;
+	int rotateRight = 0;
+	int rotateLeft = 0;
+	Image img ;
 	ArrayList<Point> sketchSP = new ArrayList<Point>();	
 	
 	
@@ -26,6 +31,10 @@ public class ShapeRepository {
 	
 	ShapeRepository(){
 		
+	}
+	
+	ShapeRepository(Image img){
+		this.img = img;
 	}
 	
 	ShapeRepository(ShapeRepository clone){
