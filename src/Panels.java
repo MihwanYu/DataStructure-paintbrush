@@ -656,8 +656,8 @@ public class Panels extends JPanel{
 				if(shape.isEmpty()==false) {
 //					copycropshape = shape.peek();
 					copycropshape = new ShapeRepository(shape.peek());
-					copycropshape.mypencolor = Color.pink;
-					System.out.println(copycropshape);
+//					copycropshape.mypencolor = Color.pink;
+					System.out.println(copycropshape+" color is "+copycropshape.mypencolor);
 				}
 				canvas.repaint();
 				
@@ -671,9 +671,10 @@ public class Panels extends JPanel{
 			}
 			else if(temp.equals("img4")) {
 				System.out.println("left rotation");
-				copycropshape = shape.pop();
+				copycropshape = shape.peek();
 				System.out.println("shape size: "+shape.size());
 				if(copycropshape.option==RECT) {
+					copycropshape = shape.pop();
 					System.out.println("rect left rotate");
 					copycropshape.minx = minx+copycropshape.height;
 					int realheight = copycropshape.height;
@@ -687,10 +688,11 @@ public class Panels extends JPanel{
 			}
 			else if(temp.equals("img5")) {
 				System.out.println("right rotation");
-				copycropshape = shape.pop();
+				copycropshape = shape.peek();
 				System.out.println("shape size: "+shape.size());
 				if(copycropshape.option==RECT) {
 					System.out.println("rect right rotate");
+					copycropshape = shape.pop();
 					copycropshape.minx = minx-copycropshape.height;
 					int realheight = copycropshape.height;
 					copycropshape.height = copycropshape.width;
@@ -701,7 +703,7 @@ public class Panels extends JPanel{
 				System.out.println("shape size: "+shape.size());
 			}
 			else if(temp.equals("img6")) {
-				mypencolor = JColorChooser.showDialog(null, "색선정", Color.blue);
+				mypencolor = JColorChooser.showDialog(null, "Color Chooser", Color.black);
 				examplepanel.repaint();
 				//펜색바꾸기 여기서 가능
 //				moveshape.peek().mypencolor = mypencolor;
