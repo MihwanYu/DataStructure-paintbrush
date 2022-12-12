@@ -327,8 +327,7 @@ public class Panels extends JPanel{
 			}
 
 			//그림자 그리기 -> 아예 모두 취호(12.11)
-			/*
-			 * 
+			
 			 
 			if(start != null) {
 
@@ -355,7 +354,7 @@ public class Panels extends JPanel{
 //					g2.fillOval(minx, miny, width, height);
 					g2.setPaint(mypencolor);
 //					g2.drawOval(minx, miny, width, height);
-//					g2.drawPolygon(new int[] {start.x, (start.x+end.x)/2, end.x}, new int[] {start.y, (start.x+end.y)/2, end.y}, 3);
+					g2.drawPolygon(new int[] {start.x, (start.x+end.x)/2, end.x}, new int[] {end.y, start.y, end.y}, 3);
 				}
 //				else if(option == POLYLINE) {
 //					g2.setPaint(mypencolor);
@@ -385,7 +384,6 @@ public class Panels extends JPanel{
 
 			}
 			
-			*/
 		}
 
 		//마우스 리스너 클래스
@@ -656,7 +654,7 @@ public class Panels extends JPanel{
 				if(shape.isEmpty()==false) {
 //					copycropshape = shape.peek();
 					copycropshape = new ShapeRepository(shape.peek());
-//					copycropshape.mypencolor = Color.pink;
+					copycropshape.mypencolor = shape.peek().mypencolor;
 					System.out.println(copycropshape+" color is "+copycropshape.mypencolor);
 				}
 				canvas.repaint();
