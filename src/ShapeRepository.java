@@ -19,8 +19,8 @@ public class ShapeRepository {
 	int [] array_y = new int [40];
 	int size = 0;
 	int moved = 0;
-	int rotateRight = 0;
-	int rotateLeft = 0;
+	int rotateRightCapacity = 0;
+	int rotateLeftCapacity = 0;
 	Image img ;
 	ArrayList<Point> sketchSP = new ArrayList<Point>();	
 	

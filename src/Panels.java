@@ -667,6 +667,24 @@ public class Panels extends JPanel{
 				}
 				canvas.repaint();
 			}
+			else if(temp.equals("img4")) {
+				System.out.println("right rotation");
+				copycropshape = shape.peek();
+				System.out.println("shape size: "+shape.size());
+				if(copycropshape.option==RECT && copycropshape.rotateRightCapacity<2) {
+					System.out.println("rect right rotate");
+					copycropshape = shape.pop();
+					copycropshape.minx = minx-copycropshape.height;
+					int realheight = copycropshape.height;
+					copycropshape.height = copycropshape.width;
+					copycropshape.width = realheight;
+					copycropshape.rotateRightCapacity ++ ;
+					shape.push(copycropshape);
+				}
+				canvas.repaint();
+				System.out.println("shape size: "+shape.size());
+			}
+			
 			else if(temp.equals("img5")) {
 				System.out.println("left rotation");
 				copycropshape = shape.peek();
@@ -684,22 +702,7 @@ public class Panels extends JPanel{
 				System.out.println("shape size: "+shape.size());
 				
 			}
-			else if(temp.equals("img4")) {
-				System.out.println("right rotation");
-				copycropshape = shape.peek();
-				System.out.println("shape size: "+shape.size());
-				if(copycropshape.option==RECT) {
-					System.out.println("rect right rotate");
-					copycropshape = shape.pop();
-					copycropshape.minx = minx-copycropshape.height;
-					int realheight = copycropshape.height;
-					copycropshape.height = copycropshape.width;
-					copycropshape.width = realheight;
-					shape.push(copycropshape);
-				}
-				canvas.repaint();
-				System.out.println("shape size: "+shape.size());
-			}
+			
 			else if(temp.equals("img6")) {
 				mypencolor = JColorChooser.showDialog(null, "Color Chooser", Color.black);
 				examplepanel.repaint();
@@ -809,7 +812,13 @@ public class Panels extends JPanel{
 	}
 	
 	public void resetCanvas() {
-		option = ERASE;
+		option = DEFAULT;
+		shape.clear();
+		redoshape.clear();
+		moveshape.clear();
+		newshape = null;
+		copycropshape = null;
+		
 		canvas.repaint();
 	}
 	
