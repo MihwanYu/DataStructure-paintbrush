@@ -205,12 +205,12 @@ public class Panels extends JPanel{
 		
 	    SpinnerNumberModel fontsize = new SpinnerNumberModel(8, 1, 50, 1);
 	    JSpinner spinner = new JSpinner(fontsize);
-	    JLabel sizelabel = new JLabel("Text Size");
+	    JLabel sizelabel = new JLabel("Text Size(X)");
 	    sizelabel.setPreferredSize(new Dimension(60, 40));
 	    toolbar.add(sizelabel);
 	    toolbar.add(spinner);
 	    
-	    JLabel fontlabel = new JLabel("Fonts");
+	    JLabel fontlabel = new JLabel("Fonts(X)");
 	    fontlabel.setPreferredSize(new Dimension(40,40));
 	    
 	    JComboBox combo = new JComboBox<>();

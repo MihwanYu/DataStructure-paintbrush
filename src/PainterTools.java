@@ -118,7 +118,7 @@ public class PainterTools extends JToolBar{
 //    tb.addSeparator();
     addSeparator();
 
-    JLabel sizelabel = new JLabel("Text Size");
+    JLabel sizelabel = new JLabel("Text Size(x)");
     sizelabel.setPreferredSize(new Dimension(60, 40));
 //    tb.add(sizelabel);
 //    tb.add(spinner);
@@ -127,7 +127,7 @@ public class PainterTools extends JToolBar{
     add(sizelabel);
     add(spinner);
 
-    JLabel fontlabel = new JLabel("Fonts");
+    JLabel fontlabel = new JLabel("Fonts(x)");
     fontlabel.setPreferredSize(new Dimension(40,40));
     combo.addItem("맑은 고딕");
     combo.addItem("궁서체");

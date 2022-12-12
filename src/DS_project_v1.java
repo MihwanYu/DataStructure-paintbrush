@@ -67,7 +67,7 @@ public class DS_project_v1 extends JFrame{
 
         mb.setBackground(Color.pink);
         JMenu[] menus = new JMenu[5];
-        String[] menunames = {"File", "Shape", "Draw", "Zoom in", "Zoom out"};
+        String[] menunames = {"File", "Shape", "Draw", "Zoom in(X)", "Zoom out(X)"};
         
         for(int i=0; i<menus.length; i++) {
         	menus[i] = new JMenu(menunames[i]);
