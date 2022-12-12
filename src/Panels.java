@@ -155,14 +155,14 @@ public class Panels extends JPanel{
 		toolbar.setSize(dim1);
 		toolbar.setLayout(new FlowLayout());
 		
-		String[] iconames = {"back", "front", "copy", "paste", "leftrotation", "rightrotation", "color", "line", "erase", "scissor", "drag"};
+		String[] iconames = {"back", "front", "copy", "paste", "leftrotation", "rightrotation", "color", "line", "erase", "drag"};
 		
 		
-	    Image[] org_image = new Image[11];
-	    Image[] ch_image = new Image[11];
-	    ImageIcon[] org_icon = new ImageIcon[11];
-	    ImageIcon[] ch_icon = new ImageIcon[11];
-	    JButton[] btn = new JButton[11];
+	    Image[] org_image = new Image[10];
+	    Image[] ch_image = new Image[10];
+	    ImageIcon[] org_icon = new ImageIcon[10];
+	    ImageIcon[] ch_icon = new ImageIcon[10];
+	    JButton[] btn = new JButton[10];
 	    
 	    int orgIdx = 0;
 		for(String name:iconames) {
@@ -669,7 +669,7 @@ public class Panels extends JPanel{
 				}
 				canvas.repaint();
 			}
-			else if(temp.equals("img4")) {
+			else if(temp.equals("img5")) {
 				System.out.println("left rotation");
 				copycropshape = shape.peek();
 				System.out.println("shape size: "+shape.size());
@@ -686,7 +686,7 @@ public class Panels extends JPanel{
 				System.out.println("shape size: "+shape.size());
 				
 			}
-			else if(temp.equals("img5")) {
+			else if(temp.equals("img4")) {
 				System.out.println("right rotation");
 				copycropshape = shape.peek();
 				System.out.println("shape size: "+shape.size());
@@ -768,6 +768,8 @@ public class Panels extends JPanel{
 				}
 				new Canvas();
 			}
+			/*
+			 * 
 			
 			else if(temp.equals("Redo")) {
 				//위에도 redo인데 왜똑같이 redo임? 어차피 실행안될듯
@@ -787,7 +789,8 @@ public class Panels extends JPanel{
 				}
 				canvas.repaint();
 			}
-			else if(temp.equals("img10")) {
+			 */
+			else if(temp.equals("img9")) {
 				System.out.println("drag mode");
 				option = 0;
 			}
