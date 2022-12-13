@@ -67,6 +67,7 @@ public class Panels extends JPanel{
 	int height;
 	int move = 0;
 	Point mouse = new Point(0,0);
+	boolean rotateState = false;
 	Image img;
 
 	//프레임 안에 있는 요소들
@@ -146,9 +147,6 @@ public class Panels extends JPanel{
 		//메뉴를 위한 정보 입력
 		JMenu file = new JMenu("File");
 		menubar.add(file);
-		JMenuItem exit = new JMenuItem("Exit");
-		file.add(exit);
-		exit.addActionListener(new ExitAction());
 
 		//툴바 설정
 		toolbar.setBackground(Color.white);
@@ -220,26 +218,6 @@ public class Panels extends JPanel{
 	    toolbar.add(fontlabel);
 	    toolbar.add(combo);
 
-		//두께 스피너에 리스너 설치 - 필요업슴
-		spinner.addChangeListener(new ChangeDetector());
-	}
-
-	class ChangeDetector implements ChangeListener{
-
-		@Override
-		public void stateChanged(ChangeEvent e) {
-			// TODO Auto-generated method stub
-			thick = (Integer)spinner.getValue();
-			examplepanel.repaint();
-		}
-
-	}
-
-	//메뉴바 Exit버튼을 위한 액션 리스너
-	class ExitAction implements ActionListener{
-		public void actionPerformed (ActionEvent e) {
-			System.exit(0);
-		}
 	}
 
 	//그림판 설정
@@ -251,7 +229,6 @@ public class Panels extends JPanel{
 		Canvas(){
 			addMouseListener(ml);
 			addMouseMotionListener(ml);
-
 		}
 
 		//새로 그림 그리는 곳 
@@ -289,30 +266,21 @@ public class Panels extends JPanel{
 					break;
 				case RECT :
 					System.out.println("minx changed: "+shape.get(i).minx);
-//					g2.fillRect(shape.get(i).minx, shape.get(i).miny, shape.get(i).width, shape.get(i).height);
 					g2.setPaint(shape.get(i).mypencolor);
 					g2.drawRect(shape.get(i).minx, shape.get(i).miny, shape.get(i).width, shape.get(i).height);
 					break;
 				case TRIANGLE :
-//					g2.drawPolygon(new int[] {shape.get(i).minx, shape.get(i).minx+shape.get(i).width/2, shape.get(i).maxx}, new int[] {shape.get(i).miny, shape.get(i).maxy, shape.get(i).miny}, 3);
-//					g2.fillOval(shape.get(i).minx, shape.get(i).miny, shape.get(i).width, shape.get(i).height);
 					g2.setColor(shape.get(i).mypencolor);
 //					g2.drawOval(shape.get(i).minx, shape.get(i).miny, shape.get(i).width, shape.get(i).height);
 					g2.drawPolygon(new int[] {shape.get(i).minx, shape.get(i).minx+shape.get(i).width/2, shape.get(i).maxx}, new int[] {shape.get(i).maxy, shape.get(i).miny, shape.get(i).maxy}, 3);
 					break;
 				case IMAGE :
-//					Dimension nDim = new Dimension(shape.get(i).img.getWidth(), shape.get(i).img.getHeight());
 					System.out.println("minx changed: "+shape.get(i).minx);
 					if(shape.get(i).img == null) {
 						System.out.println("img null");
 					}
 					g2.drawImage(shape.get(i).img, shape.get(i).minx, shape.get(i).miny, null);
 					break;
-//					g2.dispose();
-//				case POLYLINE :
-//					g2.setPaint(shape.get(i).mypencolor);
-//					g2.drawPolyline(shape.get(i).array_x, shape.get(i).array_y, shape.get(i).size);
-//					break;
 				case SKETCH : case ERASER :
 					g2.setPaint(shape.get(i).mypencolor);
 					for(int j = 1; j< shape.get(i).sketchSP.size(); j++) {
@@ -322,13 +290,10 @@ public class Panels extends JPanel{
 				case ERASE :
 					g2.setPaint(shape.get(i).myfillcolor);
 					g2.fillRect(shape.get(i).start.x, shape.get(i).start.y, Math.abs(shape.get(i).end.x-shape.get(i).start.x), Math.abs(shape.get(i).end.y-shape.get(i).start.y));
-
 				}
 			}
-
-			//그림자 그리기 -> 아예 모두 취호(12.11)
-			
 			 
+			//shadow
 			if(start != null) {
 
 				if(option == ERASER) {
@@ -345,22 +310,14 @@ public class Panels extends JPanel{
 					g2.drawLine(start.x, start.y, end.x, end.y);
 				}
 				else if(option == RECT) {
-//					g2.fillRect(minx, miny, width, height);
 					g2.setPaint(mypencolor);
+					if(!rotateState)
 					g2.drawRect(minx, miny, width, height);
 				}
 				else if(option == TRIANGLE) {
-//					g2.drawPolygon(new int[] {minx, minx+width/2, maxx}, new int[] {miny, maxy, miny}, 3);
-//					g2.fillOval(minx, miny, width, height);
 					g2.setPaint(mypencolor);
-//					g2.drawOval(minx, miny, width, height);
 					g2.drawPolygon(new int[] {start.x, (start.x+end.x)/2, end.x}, new int[] {end.y, start.y, end.y}, 3);
 				}
-//				else if(option == POLYLINE) {
-//					g2.setPaint(mypencolor);
-//					if(move == 0)g2.drawPolyline(tempX, tempY, psize+1);
-//					else g2.drawPolyline(tempX, tempY, psize);
-//				}
 				else if(option == SKETCH) {
 					g2.setPaint(mypencolor);
 					for(int i = 1; i < sketSP.size(); i++) {
@@ -542,8 +499,6 @@ public class Panels extends JPanel{
 				repaint();
 			}
 
-
-
 			@Override
 			//마우스 드레그 됐을 때
 			public void mouseDragged(MouseEvent e) {
@@ -593,7 +548,6 @@ public class Panels extends JPanel{
 						pt.move(pt.x + px, pt.y + py);
 						sketSP.add(pt);
 					}
-
 				}
 				repaint();
 			}
@@ -623,7 +577,11 @@ public class Panels extends JPanel{
 			else
 				temp = myButton.getName();
 			System.out.println("clicked button name: "+temp);
-
+			if(temp.equals("img4") || temp.equals("img5")) {
+				rotateState = true;
+			}else {
+				rotateState = false;
+			}
 			
 			if(temp.equals("img0")) {
 				option = UNDO;
@@ -679,6 +637,7 @@ public class Panels extends JPanel{
 					copycropshape.height = copycropshape.width;
 					copycropshape.width = realheight;
 					copycropshape.rotateRightCapacity ++ ;
+					if(copycropshape.rotateLeftCapacity!=0) copycropshape.rotateLeftCapacity--;
 					shape.push(copycropshape);
 				}
 				canvas.repaint();
@@ -689,13 +648,15 @@ public class Panels extends JPanel{
 				System.out.println("left rotation");
 				copycropshape = shape.peek();
 				System.out.println("shape size: "+shape.size());
-				if(copycropshape.option==RECT) {
+				if(copycropshape.option==RECT && copycropshape.rotateLeftCapacity<2) {
 					copycropshape = shape.pop();
 					System.out.println("rect left rotate");
 					copycropshape.minx = minx+copycropshape.height;
 					int realheight = copycropshape.height;
 					copycropshape.height = copycropshape.width;
 					copycropshape.width = realheight;
+					copycropshape.rotateLeftCapacity++;
+					if(copycropshape.rotateRightCapacity!=0) copycropshape.rotateLeftCapacity--;
 					shape.push(copycropshape);
 				}
 				canvas.repaint();
@@ -769,28 +730,6 @@ public class Panels extends JPanel{
 				}
 				new Canvas();
 			}
-			/*
-			 * 
-			
-			else if(temp.equals("Redo")) {
-				//위에도 redo인데 왜똑같이 redo임? 어차피 실행안될듯
-				option = REDO;
-				if(redoshape.isEmpty() == false) shape.push(redoshape.pop()); 
-
-				canvas.repaint();
-			}
-			else if(temp.equals("img9")) {
-				//잘라내기 버튼
-				System.out.println("crop action");
-				if(shape.isEmpty()==false) {
-//					copycropshape = shape.peek();
-					copycropshape = shape.pop();
-					copycropshape.mypencolor = Color.pink;
-					System.out.println(copycropshape);
-				}
-				canvas.repaint();
-			}
-			 */
 			else if(temp.equals("img9")) {
 				System.out.println("drag mode");
 				option = 0;
@@ -835,8 +774,6 @@ public class Panels extends JPanel{
 			try {
 				System.out.println("open picture");
 				ShapeRepository newImage = new ShapeRepository();
-//				newImage = new ShapeRepository();
-//				img = ImageIO.read(new File(selectedFile.getAbsolutePath()));
 				Toolkit t=Toolkit.getDefaultToolkit();  
 		        Image img=ImageIO.read(new File(selectedFile.getAbsolutePath()));  
 //		        g.drawImage(i, 120,100,this); 
@@ -849,9 +786,6 @@ public class Panels extends JPanel{
 				newImage.maxx = bi.getWidth();
 				newImage.maxy = bi.getHeight();
 				shape.push(newImage);
-//				Dimension nDim = new Dimension(img.getWidth(), img.getHeight());
-				
-//				Graphics2D g2 = img.createGraphics();
 				canvas.getGraphics().drawImage(img, 0, 0, null);
 //				g2.dispose();
 				
