@@ -265,7 +265,7 @@ public class Panels extends JPanel{
 					g2.drawLine(shape.get(i).start.x, shape.get(i).start.y, shape.get(i).end.x, shape.get(i).end.y);
 					break;
 				case RECT :
-					System.out.println("minx changed: "+shape.get(i).minx);
+//					System.out.println("minx changed: "+shape.get(i).minx);
 					g2.setPaint(shape.get(i).mypencolor);
 					g2.drawRect(shape.get(i).minx, shape.get(i).miny, shape.get(i).width, shape.get(i).height);
 					break;
@@ -275,7 +275,7 @@ public class Panels extends JPanel{
 					g2.drawPolygon(new int[] {shape.get(i).minx, shape.get(i).minx+shape.get(i).width/2, shape.get(i).maxx}, new int[] {shape.get(i).maxy, shape.get(i).miny, shape.get(i).maxy}, 3);
 					break;
 				case IMAGE :
-					System.out.println("minx changed: "+shape.get(i).minx);
+//					System.out.println("minx changed: "+shape.get(i).minx);
 					if(shape.get(i).img == null) {
 						System.out.println("img null");
 					}

@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-//proposal 이전 버전
+//not used file
 public class DS_project_v1 extends JFrame{
 	RectPanel rectPanel;
 
@@ -187,7 +187,7 @@ public class DS_project_v1 extends JFrame{
         thicnesskmenu1.add(level51);
         thicnesskmenu1.add(level61);
 
-        //shapemenu랑 drawmenu똑같은데 왜이렇게만들어놓은건지?
+
         menus[1].add(colormenu1);
         menus[1].add(thicnesskmenu1);
 //        shapemenu.add(colormenu1);
